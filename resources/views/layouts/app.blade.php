@@ -25,14 +25,19 @@
         @include('inc.navbar')
 
         <div class="container py-4">
+            @if(auth::check())
             <div class="row justify-content-center">
                 <div class="col-md-3">
                     <ul class="list-group">
                         <li class="list-group-item">
                             <a href="{{ route('post.index') }}">Post</a>
                         </li>
+                        <li class="list-group-item">
+                            <a href="{{ route('post.create') }}">New Post</a>
+                        </li>
                     </ul>
                 </div>
+            @endif
                 <div class="col-md-9">
                     @yield('content')
                 </div>

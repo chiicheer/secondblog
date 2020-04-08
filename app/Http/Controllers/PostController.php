@@ -2,11 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Post;
+use App\Http\Requests\UpdatePostRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;//←Storageフォルダの中にあるpublicフォルダにpublicフォルダの中にあるimgフォルダ内の写真をimportする。
+use Illuminate\Support\Facades\Session;
+use Str;
+
 
 class PostController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index','show']);//←homeページとshow意外はログインしないとできないよって事。
+    }
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +39,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        //
+        return view('posts.create');
     }
 
     /**
@@ -36,7 +50,31 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //form-validation
+        $this->validate($request,[
+            'title' => 'required',
+            'description' => 'required',
+            'featured_img' => 'required|image'
+        ]);
+
+        //store into db
+        $featured = $request->featured_img;
+        $featured_new_name = time().$featured->getClientOriginalName(); //←オリジナルの名前を使うという事
+        //$featured->move('uploads/posts',$featured_new_name);
+        Storage::disk('public')->put($featured_new_name, file_get_contents($featured));
+
+        //Mass Assignment→valueをダイレクトにpostデータベースのカラムにアサインする。
+        $post = Post::create([
+            'title' => $request->title,
+            'slug' => Str::slug($request->title),
+            'description' => $request->description,
+            'featured_image' => asset('storage/'.$featured_new_name)
+        ]);
+
+        Session::flash('success','Post Created Successfully');
+
+        //return redirect
+        return redirect()->route('post.index');
     }
 
     /**
@@ -45,9 +83,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        return view('posts.show')->with('post',$post);
     }
 
     /**
@@ -56,9 +94,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+        return view('posts.create')->with('post',$post);
     }
 
     /**
@@ -68,9 +106,32 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Post $post)
     {
-        //
+        //form-validation
+        //$this->validate($request,[
+        //    'title' => 'required',
+        //    'description' => 'required',
+        //]);
+
+        //update into db
+        if($request->hasFile('featured_img')){
+            $featured = $request->featured_img;
+            $featured_new_name = time().$featured->getClientOriginalName(); //←オリジナルの名前を使うという事
+            Storage::disk('public')->put($featured_new_name, file_get_contents($featured));
+            $post->featured_image = asset('storage/'.$featured_new_name);
+        }
+
+        //$post->title = $request->title;
+        //$post->description = $request->description;
+        //$post->save();
+
+        $post->fill($request->input())->save();
+
+        Session::flash('success','Post Updated Successfully');
+
+        //return redirect
+        return redirect()->route('post.index');
     }
 
     /**
@@ -79,8 +140,12 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        Storage::disk('public')->delete($post->featured);
+
+        Session::flash('success','Post Trashed Successfully');
+        return redirect()->route('post.index');
     }
 }
