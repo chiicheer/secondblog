@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="card">
-        <div class="card-header">Posts</div>
+        <div class="card-header">Trashed Posts</div>
 
         <div class="card-body">
             @if ($posts->count() > 0)
@@ -20,22 +20,23 @@
                       </td>
                       <td>{{ $post->title }}</td>
                       <td><a href="{{ route('post.show',[$post->id]) }}" class="btn btn-sm btn-info">View</a></td>
-                      @if(Auth::check())
                       <td>
-                          <form action="{{ route('post.destroy',[$post->id]) }}" method="POST">
+                          <a href="{{ route('post.restore',['id'=>$post->id]) }}" class="btn btn-sm btn-warning">Restore</a>
+                      </td>
+                      <td>
+                          <form action="{{ route('post.kill',['id'=>$post->id]) }}" method="POST">
                               @csrf
                               <!--Form method spoofing-->
                               @method('DELETE')
-                              <button type="submit" class="btn btn-sm btn-danger">Trash</button>
+                              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                           </form>
                       </td>
-                      @endif
                   </tr>
                 @endforeach
               </tbody>
             </table>
             @else
-                <strong class="text-center">No posts found yet</strong>
+                <strong class="text-center">No trashed posts yet!</strong>
             @endif
         </div>
     </div>

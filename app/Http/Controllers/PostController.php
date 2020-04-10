@@ -143,9 +143,32 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-        Storage::disk('public')->delete($post->featured);
+        //Storage::disk('public')->delete($post->featured);
 
         Session::flash('success','Post Trashed Successfully');
         return redirect()->route('post.index');
     }
+
+    public function trashed(){
+
+        $posts = Post::onlyTrashed()->get();
+        return view('posts.trashed')->with('posts',$posts);
+    }
+
+    public function restore($id){
+
+        $post = Post::withTrashed()->where('id',$id)->first();
+        $post->restore();
+        Session::flash('success','Post Restored Successfully');
+        return redirect()->route('post.index');
+    }
+
+    public function kill($id){
+
+        $post = Post::withTrashed()->where('id',$id)->first();
+        $post->forceDelete();
+        Session::flash('success','Post Deleted Successfully');
+        return redirect()->route('post.index');
+    }
+
 }

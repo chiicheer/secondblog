@@ -9,9 +9,6 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -33,7 +30,16 @@
                             <a href="{{ route('post.index') }}">Post</a>
                         </li>
                         <li class="list-group-item">
+                            <a href="{{ route('category.create') }}">Create Category</a>
+                        </li>
+                        <li class="list-group-item">
                             <a href="{{ route('post.create') }}">New Post</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ route('post.trashed') }}">Trashed Post</a>
+                        </li>
+                        <li class="list-group-item">
+                            <a href="{{ route('setting.index') }}">Settings</a>
                         </li>
                     </ul>
                 </div>
@@ -44,5 +50,8 @@
             </div>
         </div>
     </div>
+
+        <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" defer></script>
 </body>
 </html>
