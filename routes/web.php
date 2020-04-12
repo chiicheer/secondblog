@@ -40,12 +40,20 @@ Route::delete('/kill-post/{id}',[
 	'as' => 'post.kill'
 ]);
 
+Route::get('/category/index',[
+	'uses' => 'CategoryController@index',
+	'as' => 'category.index'
+]);
+
 Route::get('/category/create',[
 	'uses' => 'CategoryController@create',
 	'as ' => 'category.create'
 ]);
 
-
+Route::post('/category/store',[
+	'uses' => 'CategoryController@store',
+	'as' => 'category.store'
+]);
 
 Route::get('/settings',[
   	'uses' => 'SettingController@index',

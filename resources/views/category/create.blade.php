@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ isset($category)? 'Edit Category' : 'New Category' }}</div>
+                <div class="card-header">New Category</div>
 
                 <div class="card-body">
                 @if(count($errors) > 0)
@@ -15,19 +15,19 @@
                             @endforeach
                         </ul>
                 @endif
-                    <form action="{{ isset($category)? route('category.update',['id' => $category->id]) : route('category.store') }}" method="POST">
+                    <form action="{{ route('category.store') }}" method="POST">
                         @csrf
 
-                        @if(isset($category))
+                       <!-- @if(isset($category))
                             @method('PUT')
-                        @endif
+                        @endif-->
 
                         <div class="form-group">
                             <label>Category Name</label>
-                            <input type="text" name="name" class="form-control" value="{{ isset($category)? $category->name : '' }}">
+                            <input type="text" name="name" class="form-control">
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-block btn-success">{{ isset($category)? 'Update Category' : 'Create Category' }}</button>
+                            <button type="submit" class="btn btn-block btn-success">Create Category</button>
                         </div>
                     </form>
                 </div>
