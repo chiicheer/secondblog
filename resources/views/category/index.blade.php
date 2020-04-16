@@ -18,7 +18,7 @@
                       <a href="{{ route('category.edit',[$category->id]) }}" class="btn btn-sm btn-info">Edit</a>
                     </td>
                     <td>
-                      <a href="{{ route('category.delete',[$category->id]) }}" class="btn btn-sm btn-danger">Delete</a>
+                      <a href="{{ route('category.destroy',[$category->id]) }}" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                   </tr>
                  @endforeach

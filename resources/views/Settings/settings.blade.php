@@ -8,8 +8,9 @@
                 <div class="card-header">Edit blog settings</div>
 
                 <div class="card-body">
-                    <form action="{{ route('setting.update') }}" method="post">
+                    <form action="{{ route('setting.update',[$settings->id]) }}" method="post">
                         {{ csrf_field() }}
+                        @method('PUT')
                         <div class="form-group">
                             <label for="name">Site name</label>
                             <input type="text" name="site_name" class="form-control" value="{{ $settings->site_name }}">

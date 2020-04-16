@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header"><?php echo isset($post)? 'Edit Post' : 'New Post' ?></div>
+                <div class="card-header">Create Post</div>
 
                 <div class="card-body">
                 @if($errors->any())
@@ -17,27 +17,38 @@
                         </ul>
                     </div>
                 @endif
-                    <form action="{{ isset($post)? route('post.update',[$post->id]) : route('post.store') }}" method="post" enctype="multipart/form-data">
+                    <form action="{{ route('post.store') }}" method="post" enctype="multipart/form-data">
                         @csrf
-
-                        @if(isset($post))
-                            @method('PUT')
-                        @endif
-
                         <div class="form-group">
                             <label>Title</label>
-                            <input type="text" name="title" class="form-control" value="{{ isset($post)? $post->title : '' }}">
+                            <input type="text" name="title" class="form-control">
                         </div>
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea name="description" id="" cols="30" rows="10" class="form-control">{{ isset($post)? $post->description : '' }}</textarea>
+                            <textarea name="description" id="" cols="30" rows="10" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Select a category</label>
+                            <select name="category_id" id="category" class="form-control">
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Select tags</label>
+                            @foreach($tags as $tag)
+                                <div class="checkbox">
+                                <label><input type="checkbox" name="tags[]" value="{{ $tag->id }}">{{ $tag->tag }}</label>
+                                </div>
+                            @endforeach
                         </div>
                         <div class="form-group">
                             <label>Featured Image</label>
                             <input type="file" name="featured_img" class="form-control-file"/>
                         </div>
                         <div class="form-group">
-                            <button type="submit" class="btn btn-block btn-success">{{ isset($post)? 'Update Post' : 'Store Post' }}</button>
+                            <button type="submit" class="btn btn-success">Store Post</button>
                         </div>
                     </form>
                 </div>

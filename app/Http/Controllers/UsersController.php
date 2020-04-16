@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Setting;
 use Illuminate\Http\Request;
+use App\User;
+use App\Profile;
 use Illuminate\Support\Facades\Session;
 
-class SettingController extends Controller
+
+class UsersController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +17,7 @@ class SettingController extends Controller
      */
     public function index()
     {
-        return view('settings.settings')->with('settings', Setting::first());
+        return view('users.index')->with('users', User::all());
     }
 
     /**
@@ -25,7 +27,7 @@ class SettingController extends Controller
      */
     public function create()
     {
-        //
+        return view('users.create');
     }
 
     /**
@@ -36,16 +38,34 @@ class SettingController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required|min:3|max:30',
+            'email' => 'required|email',
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt('password')
+        ]);
+
+        $profile = Profile::create([
+            'user_id' => $user->id,
+            'avatar' => 'uploads/avatar/sample.jpg'
+        ]);
+
+        Session::flash('success', 'User added successfully');
+
+        return redirect()->route('users');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Setting  $setting
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Setting $setting)
+    public function show($id)
     {
         //
     }
@@ -53,10 +73,10 @@ class SettingController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Setting  $setting
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Setting $setting)
+    public function edit($id)
     {
         //
     }
@@ -65,42 +85,26 @@ class SettingController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Setting  $setting
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Setting $setting)
+    public function update(Request $request, $id)
     {
-        $this->validate(request(),[
-            'site_name' => 'required',
-            'contact_number' => 'required',
-            'contact_email' => 'required',
-            'address' => 'required'
-        ]);
-
-        $settings = Setting::first();
-
-        /*$settings->site_name = request()->site_name;
-        $settings->contact_number = request()->contact_number;
-        $settings->contact_email = request()->contact_email;
-        $settings->address = request()->address;
-
-        $settings->save();*/
-
-        $settings->fill($request->input())->save();
-
-        Session::flash('success','Settings Updated successfully');
-
-        return redirect()->back();
+        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Setting  $setting
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Setting $setting)
+    public function destroy(User $user)
     {
-        //
+        $user->delete();
+
+        Session::flash('success', 'User deleted successfully');
+
+        return redirect()->back();
     }
 }

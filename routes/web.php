@@ -19,7 +19,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 
 
 Route::resource('post','PostController');
@@ -40,27 +40,23 @@ Route::delete('/kill-post/{id}',[
 	'as' => 'post.kill'
 ]);
 
-Route::get('/category/index',[
-	'uses' => 'CategoryController@index',
-	'as' => 'category.index'
-]);
+Route::resource('setting','SettingController');
 
-Route::get('/category/create',[
-	'uses' => 'CategoryController@create',
-	'as ' => 'category.create'
-]);
+Route::resource('category','CategoryController');
 
-Route::post('/category/store',[
-	'uses' => 'CategoryController@store',
-	'as' => 'category.store'
-]);
+Route::resource('users','UsersController');
 
-Route::get('/settings',[
-  	'uses' => 'SettingController@index',
-  	'as' => 'setting.index'
-]);
+Route::resource('profile','ProfileController');
 
-Route::post('/settings/update',[
-	'uses' => 'SettingController@update',
-	'as' => 'setting.update'
-]);
+Route::get('/user/profile',[
+        'uses' => 'ProfileController@index',
+        'as' => 'user.profile'
+    ]);
+
+Route::post('/user/profile/update',[
+        'uses' => 'ProfileController@update',
+        'as' => 'user.profile.update'
+    ]);
+
+Route::resource('tag','TagController');
+

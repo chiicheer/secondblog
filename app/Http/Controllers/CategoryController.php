@@ -67,7 +67,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('category.edit')->with('category',$category);
     }
 
     /**
@@ -79,7 +79,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required|min:6|max:25|unique:categories'
+        ]);
+
+        $category->name = $request->name;
+        $category->save();
+        
+        Session::flash('success', 'Category Updated Successfully');
+        return redirect()->route('category.index');
     }
 
     /**
@@ -90,6 +98,12 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        foreach($category->posts as $post){
+            $post->forcedelete();
+        }
+
+        $category->delete();
+        Session::flash('success', 'Category Deleted Successfully');
+        return redirect()->route('category.index'); 
     }
 }

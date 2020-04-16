@@ -69,5 +69,17 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        $profile = Profile::create([
+            'user_id' => $user->id,
+            'avatar' => secure_asset('uploads/avatar/sample.png'),
+            'about' => 'Lorem ipusum, dolor sit amet consectetur adipisicing elite',
+            'facebook' => 'https://www.facebook.com/sample',
+            'youtube' => 'https://www.youtube.come/sample'
+        ]);
+
+        $user->profile()->save($profile);
+
+        return $user;
     }
 }
