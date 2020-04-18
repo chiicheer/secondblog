@@ -10,7 +10,7 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -26,7 +26,7 @@
         @include('inc.navbar')
 
         <div class="container py-4">
-            @if(session()->has('success'))
+           <!-- @if(session()->has('success'))
                 <div class="alert alert-success">
                     {{ session()->get('success') }}
                 </div>
@@ -35,7 +35,7 @@
                 <div class="alert alert-info">
                     {{ session()->get('info') }}
                 </div>
-            @endif
+            @endif-->
             @if(auth::check())
             <div class="row justify-content-center">
                 <div class="col-md-3">
@@ -87,7 +87,7 @@
     </div>
 
     <!--scripts -->
-<!--    <script src="/js/app.js"></script>
+    <script src="/js/app.js"></script>
     <script src="{{ asset('js/toastr.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
 
@@ -95,7 +95,7 @@
         @if(Session::has('success'))
           toastr.success("{{ Session::get('success') }}")
         @endif
-    </script>-->
+    </script>
        
 </body>
 </html>

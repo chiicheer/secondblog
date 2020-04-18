@@ -16,7 +16,7 @@
                         @foreach($users as $user)
                         <tr>
                             <td>
-                                <img src="{{ asset($user->profile->avatar) }}" alt="noimage" width="50px" height="50px" style="border-radius:50%;">
+                              
                             </td> 
                             <td>{{ $user->name }}</td>
                             <td>

@@ -13,9 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [
+    'uses' => 'FrontendController@index',
+    'as' => 'index'
+]);
 
 Auth::routes();
 
@@ -60,3 +61,7 @@ Route::post('/user/profile/update',[
 
 Route::resource('tag','TagController');
 
+Route::get('/category/{category}',[
+        'uses' => 'FrontendController@category',
+        'as' => 'category.single'
+]);
